@@ -126,7 +126,7 @@
                         <button type="submit" class="btn btn-primary">Add Game</button>
                     </form>
                 </div>
-                <div class="col-10 table">
+                <div class="col-10">
                     <table class="table">
                         <thead>
                             <tr>
