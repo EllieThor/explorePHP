@@ -160,6 +160,11 @@
             const found =games.find(item => Number(item.ID)===id);
             console.log("found game: " , found);
            
+            // <?php 
+            //     $sql = "UPDATE  games SET WHERE Category = '$categoryToOpen' ";
+            //     $result = mysqli_query($conn,$sql) or die ("Error in query: $sql. ".mysqli_error());
+            // ?>;
+        //    UPDATE servers SET Status=${req.body.Status === 0 ? 1 : 0} WHERE ID=${req.body.ID}
         }
     </script>
   </body>
