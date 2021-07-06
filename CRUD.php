@@ -1,22 +1,16 @@
 <?php
     include 'connect.php';
     
-    $TeamA="";
-    $TeamB="";
-    $ScoreTeamA="";
-    $ScoreTeamB="";
-    $Category="";
-    $Date="";
-
+    $TeamA = $TeamB = $ScoreTeamA = $ScoreTeamB = $Category = $Date = "";
     $ID= -1;
     $type=0;
-   
+
 
 
     if(isset($_GET['type']))
         $type = $_GET['type'];
 
-    if($type == 1){
+    if($type == 1||$type==3){
         if(isset($_GET['TeamA']))
             $TeamA=$_GET['TeamA'];
 
@@ -35,8 +29,14 @@
         if(isset($_GET['Date']))
             $Date=$_GET['Date'];
 
+        if(isset($_GET['id']))
+            $id=$_GET['id'];
+
         if( $TeamA !== "" || $TeamB !== "" || $ScoreTeamA !== "" || $ScoreTeamB !== "" || $Category !== "" || $Date !== ""){
-            $sql="INSERT INTO games(TeamA, TeamB, ScoreTeamA, ScoreTeamB, Category, Date) VALUES('$TeamA','$TeamB','$ScoreTeamA','$ScoreTeamB','$Category','$Date')";
+           if($type==1)
+                $sql="INSERT INTO games(TeamA, TeamB, ScoreTeamA, ScoreTeamB, Category, Date) VALUES('$TeamA','$TeamB','$ScoreTeamA','$ScoreTeamB','$Category','$Date')";
+            else
+                $sql="UPDATE games SET TeamA='$TeamA', TeamB='$TeamB', ScoreTeamA='$ScoreTeamA', ScoreTeamB='$ScoreTeamB', Category='$Category', Date='$Date' WHERE ID=$id";
             $result = mysqli_query($conn,$sql) or die ("Error in query: $sql. ".mysqli_error());
         };
 
@@ -109,19 +109,20 @@
                 <div class="col-2">
                     <form action="">
                         <div class="mb-3">
-                            <input type="hidden" name="type" value="1"  class="form-control">
+                            <input type="hidden" name="id" value="1" id="valueTypeDV"  class="form-control">
+                            <input type="hidden" name="type" value="" id="idDV"  class="form-control">
                             <label for="TeamA" class="form-label">TeamA</label>
-                            <input type="text" name="TeamA" class="form-control">
+                            <input type="text" name="TeamA"  id="teamADV"  class="form-control">
                             <label for="TeamB" class="form-label">TeamB</label>
-                            <input type="text" name="TeamB" class="form-control">
+                            <input type="text" name="TeamB" id="teamBDV"  class="form-control">
                             <label for="ScoreTeamA" class="form-label">ScoreTeamA</label>
-                            <input type="number" name="ScoreTeamA" class="form-control">
+                            <input type="number" name="ScoreTeamA" id="scoreTeamADV"  class="form-control">
                             <label for="ScoreTeamB" class="form-label">ScoreTeamB</label>
-                            <input type="number" name="ScoreTeamB" class="form-control">
+                            <input type="number" name="ScoreTeamB" id="scoreTeamBDV"  class="form-control">
                             <label for="Category" class="form-label">Category</label>
-                            <input type="number" name="Category" class="form-control">
+                            <input type="number" name="Category" id="categoryDV"  class="form-control">
                             <label for="Date" class="form-label">Date</label>
-                            <input type="date" name="Date" class="form-control">
+                            <input type="text" name="Date" id="dateDV"  class="form-control">
                         </div>
                         <button type="submit" class="btn btn-primary">Add Game</button>
                     </form>
@@ -157,16 +158,26 @@
             var games = <?php echo json_encode($gamesARR); ?>;
             console.log("id" , id ,games);
 
-            const found =games.find(item => Number(item.ID)===id);
+            const found =games.find(item => item.ID==id);
             console.log("found game: " , found);
+
+           idDV.value=found.ID;
+           valueTypeDV.value=3;
+           teamADV.value=found.TeamA;
+           teamBDV.value=found.TeamB;
+           scoreTeamADV.value=found.ScoreTeamA;
+           scoreTeamBDV.value=found.ScoreTeamB;
+           categoryDV.value=found.Category;
+           dateDV.value=found.Date;
            
-            // <?php 
-            //     $sql = "UPDATE  games SET WHERE Category = '$categoryToOpen' ";
-            //     $result = mysqli_query($conn,$sql) or die ("Error in query: $sql. ".mysqli_error());
-            // ?>;
-        //    UPDATE servers SET Status=${req.body.Status === 0 ? 1 : 0} WHERE ID=${req.body.ID}
+
         }
     </script>
   </body>
 </html>
 
+  <?php 
+            //     $sql = "UPDATE  games SET WHERE Category = '$categoryToOpen' ";
+            //     $result = mysqli_query($conn,$sql) or die ("Error in query: $sql. ".mysqli_error());
+            // ?>;
+        <!-- //    UPDATE servers SET Status=${req.body.Status === 0 ? 1 : 0} WHERE ID=${req.body.ID} -->
